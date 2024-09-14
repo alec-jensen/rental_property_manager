@@ -1,0 +1,1 @@
+UPDATE Session SET SessionToken = %s, Expiry = %s WHERE SessionId = %s;

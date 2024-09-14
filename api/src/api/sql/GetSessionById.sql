@@ -1,0 +1,1 @@
+SELECT * FROM Session WHERE SessionId = %s;

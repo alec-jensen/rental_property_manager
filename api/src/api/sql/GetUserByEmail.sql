@@ -1,0 +1,1 @@
+SELECT * FROM User WHERE Email = %s;

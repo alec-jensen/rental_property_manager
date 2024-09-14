@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="512"
+   height="512"
+   viewBox="0 0 135.46667 135.46667"
+   version="1.1"
+   id="svg1305"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   sodipodi:docname="tdm-lgoo.svg"
+   inkscape:export-filename="tdm-lgoo.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1307"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     showguides="true"
+     inkscape:lockguides="false"
+     inkscape:zoom="1.0458706"
+     inkscape:cx="43.026353"
+     inkscape:cy="286.84236"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid10567"
+       originx="-44.171186"
+       originy="-22.683167" />
+  </sodipodi:namedview>
+  <defs
+     id="defs1302" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-44.171184,-22.683167)">
+    <text
+       xml:space="preserve"
+       style="font-size:61.1727px;font-family:HYGothic-Extra;-inkscape-font-specification:HYGothic-Extra;writing-mode:lr-tb;fill:#71563a;fill-opacity:1;stroke-width:0.318608"
+       x="43.652752"
+       y="110.66801"
+       id="text3297"><tspan
+         sodipodi:role="line"
+         id="tspan3295"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:61.1727px;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, ';writing-mode:lr-tb;fill:#71563a;fill-opacity:1;stroke-width:0.318608"
+         x="43.652752"
+         y="110.66801">TDM</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.532px;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, ';letter-spacing:3.02751px;writing-mode:lr-tb;fill:#71563a;fill-opacity:1;stroke-width:0.302751"
+       x="51.903992"
+       y="133.04004"
+       id="text3301"
+       transform="scale(1.0789404,0.92683526)"><tspan
+         sodipodi:role="line"
+         id="tspan3299"
+         style="font-size:14.532px;fill:#71563a;fill-opacity:1;stroke-width:0.302751"
+         x="51.903992"
+         y="133.04004">PROPERTIES</tspan></text>
+    <rect
+       style="fill:#71563a;fill-opacity:1;stroke-width:0.181321"
+       id="rect5481"
+       width="116.78733"
+       height="0.6028614"
+       x="56.261616"
+       y="64.64209" />
+    <rect
+       style="fill:#71563a;fill-opacity:1;stroke-width:0.180062"
+       id="rect6935"
+       width="115.17175"
+       height="0.6028614"
+       x="57.877182"
+       y="127.02658" />
+  </g>
+</svg>
