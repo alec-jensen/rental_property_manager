@@ -75,11 +75,13 @@ import { asset, url } from '../lib/data.js';
 </div>
 
 <script>
-	import { testSession, API_URL } from '../lib/userData';
+	import { testSession, API_URL } from '../lib/api';
 
-	if (testSession()) {
-		window.location.href = '/';
-	}
+	testSession().then((res) => {
+		if (res === true) {
+			window.location.href = '/';
+		}
+	});
 
 	document.querySelector('form').addEventListener('submit', (e) => {
 		e.preventDefault();

@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI, HTTPException, status, Header
 from fastapi.middleware.cors import CORSMiddleware
 import asyncio
 from asyncmy import connect
@@ -9,6 +9,7 @@ import uuid
 import bcrypt
 import secrets
 import datetime
+from typing import Annotated
 
 from request_models import LoginRequestModel, CheckSessionRequestModel
 from sql_query_manager import SQLQueryManager
@@ -27,6 +28,8 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
+# TODO: Changes made from another client on the database
+# from another client aren't reflected on the api for some reason
 
 class Database:
     async def init(self):
@@ -170,6 +173,40 @@ async def logout(request: CheckSessionRequestModel):
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid session"
         )
+
+@app.get("/user/@me")
+async def get_user(Authorization: Annotated[str | None, Header()]):
+    if Authorization is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid session"
+        )
+
+    session_id, session_token = Authorization.removeprefix("Bearer ").split(":")
+
+    if await verify_session(session_id, session_token):
+        async with db.conn.cursor(cursor=DictCursor) as cursor:
+            await SQM.execute("GetSessionById", cursor, (session_id,))
+            session = await cursor.fetchone()
+
+            await SQM.execute("GetUserById", cursor, (session["UserId"],))
+            user = await cursor.fetchone()
+
+            return {
+                "created_at": user["Created"],
+                "user_id": user["UserId"],
+                "username": user["Username"],
+                "email": user["Email"],
+                "first_name": user["FirstName"],
+                "last_name": user["LastName"],
+                "role_id": user["RoleId"],
+            }
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid session"
+        )
+
 
 
 def main():

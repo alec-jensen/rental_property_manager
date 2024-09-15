@@ -46,7 +46,7 @@ import SearchInput from '../components/SearchInput.astro';
 				<a href="/" class="flex ml-2 md:mr-24">
 					<img
 						src="/tdm-logo.svg"
-						class="h-16 mr-3"
+						class="h-8 mr-3"
 						alt="TDM Logo"
 					/>
 					<span
@@ -116,6 +116,7 @@ import SearchInput from '../components/SearchInput.astro';
 						<a
 							href="#"
 							class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white"
+							id="sign-out"
 							>Sign out</a
 						>
 					</div>
@@ -554,7 +555,7 @@ import SearchInput from '../components/SearchInput.astro';
 						</a>
 						<a
 							href="#"
-							class="block p-4 text-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600"
+							class="block p-4 text-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 signout"
 						>
 							<svg
 								class="mx-auto mb-1 text-gray-500 w-7 h-7 dark:text-gray-400"
@@ -570,7 +571,7 @@ import SearchInput from '../components/SearchInput.astro';
 								></path></svg
 							>
 							<div class="text-sm font-medium text-gray-900 dark:text-white">
-								Logout
+								Sign out
 							</div>
 						</a>
 					</div>
@@ -603,15 +604,12 @@ import SearchInput from '../components/SearchInput.astro';
 						id="dropdown-2"
 					>
 						<div class="px-4 py-3" role="none">
-							<p class="text-sm text-gray-900 dark:text-white" role="none">
-								Neil Sims
-							</p>
+							<p class="text-sm text-gray-900 dark:text-white" role="none" id="user-name"></p>
 							<p
 								class="text-sm font-medium text-gray-900 truncate dark:text-gray-300"
 								role="none"
-							>
-								neil.sims@flowbite.com
-							</p>
+								id="user-email"
+							></p>
 						</div>
 						<ul class="py-1" role="none">
 							<li>
@@ -638,8 +636,9 @@ import SearchInput from '../components/SearchInput.astro';
 							<li>
 								<a
 									href="#"
-									class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-									role="menuitem">Sign out</a
+									class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white signout"
+									role="menuitem"
+									>Sign out</a
 								>
 							</li>
 						</ul>
@@ -649,3 +648,38 @@ import SearchInput from '../components/SearchInput.astro';
 		</div>
 	</div>
 </nav>
+
+<script>
+	import { logout, getUserData } from "../lib/api";
+
+	function signout() {
+		logout();
+
+		localStorage.removeItem('session_id');
+		localStorage.removeItem('session_token');
+		localStorage.removeItem('session_expiry');
+
+		window.location.href = '/authentication/sign-in';
+	}
+
+  let signoutButtons = document.querySelectorAll('.signout');
+
+	for (let i = 0; i < signoutButtons.length; i++) {
+		signoutButtons[i].addEventListener('click', signout);
+	}
+
+	document.addEventListener('DOMContentLoaded', function () {
+		getUserData().then((data) => {
+			if (data.first_name && data.last_name) {
+				document.getElementById('user-name').innerText = `${data.first_name} ${data.last_name}`;
+			} else if (data.first_name) {
+				document.getElementById('user-name').innerText = data.first_name;
+			} else if (data.last_name) {
+				document.getElementById('user-name').innerText = data.last_name;
+			} else {
+				document.getElementById('user-name').innerText = data.username;
+			}
+			document.getElementById('user-email').innerText = data.email;
+		});
+	});
+</script>
