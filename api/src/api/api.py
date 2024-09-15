@@ -38,7 +38,8 @@ class Database:
             port=int(os.getenv("MARIADB_PORT", 3306)),
             user=os.getenv("MARIADB_USER", "root"),
             password=os.getenv("MARIADB_PASSWORD", "password"),
-            db=os.getenv("MARIADB_DATABASE", "test")
+            database=os.getenv("MARIADB_DATABASE", "test"),
+            autocommit=True
         )
 
 
@@ -229,3 +230,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+    db.conn.close()
