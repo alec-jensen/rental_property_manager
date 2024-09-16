@@ -1,6 +1,5 @@
 import os
-from asyncmy import Connection
-from asyncmy.errors import ProgrammingError
+from aiomysql import Connection
 from dataclasses import dataclass
 
 class SQLParseError(Exception):
@@ -15,9 +14,6 @@ class SQLQueryManager:
     def __init__(self):
         self.queries = {}
 
-    def set_connection(self, conn: Connection):
-        self.conn = conn
-
     def load_dir(self, path):
         if not os.path.isdir(path):
             raise ValueError(f"Path '{path}' is not a directory")
@@ -30,7 +26,7 @@ class SQLQueryManager:
     async def execute(self, name, cursor, *args, **kwargs):
         try:
             await cursor.execute(self.queries[name], *args, **kwargs)
-        except ProgrammingError as e:
+        except Exception as e:
             raise SQLParseError(f"Error executing query '{name}': {e}")
 
     def get(self, name):

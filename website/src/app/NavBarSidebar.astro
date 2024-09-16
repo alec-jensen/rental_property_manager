@@ -43,24 +43,18 @@ import SearchInput from '../components/SearchInput.astro';
 							clip-rule="evenodd"></path></svg
 					>
 				</button>
-				<a href="/" class="flex ml-2 md:mr-24">
-					<img
-						src="/tdm-logo.svg"
-						class="h-8 mr-3"
-						alt="TDM Logo"
-					/>
-					<span
+				<a href="/" class="flex ml-4 mr-4">
+					<img src="/tdm-logo.svg" class="h-10 mr-3" alt="TDM Logo" />
+					<!-- <span
 						class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white"
 						>TDM Properties</span
-					>
+					> -->
 				</a>
 
 				<SearchInput />
 			</div>
 
 			<div class="flex items-center">
-				<GitHubButton repository="themesberg/flowbite-astro-admin-dashboard" />
-
 				<!-- Search mobile -->
 				<button
 					id="toggleSidebarMobileSearch"
@@ -116,8 +110,7 @@ import SearchInput from '../components/SearchInput.astro';
 						<a
 							href="#"
 							class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white"
-							id="sign-out"
-							>Sign out</a
+							id="sign-out">Sign out</a
 						>
 					</div>
 				</div>
@@ -380,13 +373,12 @@ import SearchInput from '../components/SearchInput.astro';
 					</a>
 				</div>
 				<!-- Apps -->
-				<button
+				<!-- <button
 					type="button"
 					data-dropdown-toggle="apps-dropdown"
 					class="hidden p-2 text-gray-500 rounded-lg sm:flex hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700"
 				>
 					<span class="sr-only">View notifications</span>
-					<!-- Icon -->
 					<svg
 						class="w-6 h-6"
 						fill="currentColor"
@@ -396,7 +388,7 @@ import SearchInput from '../components/SearchInput.astro';
 							d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
 						></path></svg
 					>
-				</button>
+				</button> -->
 				<!-- Dropdown menu -->
 				<div
 					class="z-20 z-50 hidden max-w-sm my-4 overflow-hidden text-base list-none bg-white divide-y divide-gray-100 rounded shadow-lg dark:bg-gray-700 dark:divide-gray-600"
@@ -580,7 +572,7 @@ import SearchInput from '../components/SearchInput.astro';
 				<ColorModeSwitcher />
 
 				<!-- Profile -->
-				<div class="flex items-center ml-3">
+				<div class="flex items-center ml-2">
 					<div>
 						<button
 							type="button"
@@ -590,26 +582,40 @@ import SearchInput from '../components/SearchInput.astro';
 							data-dropdown-toggle="dropdown-2"
 						>
 							<span class="sr-only">Open user menu</span>
-							<img
-								class="w-8 h-8 rounded-full"
-								src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-								alt="user photo"
-							/>
+							<svg
+								class="w-8 h-8 rounded-full text-gray-500 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700"
+								aria-hidden="true"
+								xmlns="http://www.w3.org/2000/svg"
+								width="24"
+								height="24"
+								fill="currentColor"
+								viewBox="0 0 24 24"
+							>
+								<path
+									fill-rule="evenodd"
+									d="M12 20a7.966 7.966 0 0 1-5.002-1.756l.002.001v-.683c0-1.794 1.492-3.25 3.333-3.25h3.334c1.84 0 3.333 1.456 3.333 3.25v.683A7.966 7.966 0 0 1 12 20ZM2 12C2 6.477 6.477 2 12 2s10 4.477 10 10c0 5.5-4.44 9.963-9.932 10h-.138C6.438 21.962 2 17.5 2 12Zm10-5c-1.84 0-3.333 1.455-3.333 3.25S10.159 13.5 12 13.5c1.84 0 3.333-1.455 3.333-3.25S13.841 7 12 7Z"
+									clip-rule="evenodd"></path>
+							</svg>
 						</button>
 					</div>
 					<!-- Dropdown menu -->
-					<!-- TODO: Get user info from API -->
 					<div
 						class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
 						id="dropdown-2"
 					>
 						<div class="px-4 py-3" role="none">
-							<p class="text-sm text-gray-900 dark:text-white" role="none" id="user-name"></p>
+							<p
+								class="text-sm text-gray-900 dark:text-white"
+								role="none"
+								id="user-name"
+							>
+							</p>
 							<p
 								class="text-sm font-medium text-gray-900 truncate dark:text-gray-300"
 								role="none"
 								id="user-email"
-							></p>
+							>
+							</p>
 						</div>
 						<ul class="py-1" role="none">
 							<li>
@@ -637,8 +643,7 @@ import SearchInput from '../components/SearchInput.astro';
 								<a
 									href="#"
 									class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white signout"
-									role="menuitem"
-									>Sign out</a
+									role="menuitem">Sign out</a
 								>
 							</li>
 						</ul>
@@ -650,7 +655,7 @@ import SearchInput from '../components/SearchInput.astro';
 </nav>
 
 <script>
-	import { logout, getUserData } from "../lib/api";
+	import { logout, getUserData } from '../lib/api';
 
 	function signout() {
 		logout();
@@ -662,7 +667,7 @@ import SearchInput from '../components/SearchInput.astro';
 		window.location.href = '/authentication/sign-in';
 	}
 
-  let signoutButtons = document.querySelectorAll('.signout');
+	let signoutButtons = document.querySelectorAll('.signout');
 
 	for (let i = 0; i < signoutButtons.length; i++) {
 		signoutButtons[i].addEventListener('click', signout);
@@ -671,7 +676,9 @@ import SearchInput from '../components/SearchInput.astro';
 	document.addEventListener('DOMContentLoaded', function () {
 		getUserData().then((data) => {
 			if (data.first_name && data.last_name) {
-				document.getElementById('user-name').innerText = `${data.first_name} ${data.last_name}`;
+				document.getElementById(
+					'user-name',
+				).innerText = `${data.first_name} ${data.last_name}`;
 			} else if (data.first_name) {
 				document.getElementById('user-name').innerText = data.first_name;
 			} else if (data.last_name) {

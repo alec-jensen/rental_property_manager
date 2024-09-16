@@ -2,5 +2,5 @@ fastapi~=0.101.1
 slowapi~=0.1.8
 pyyaml~=6.0.1
 uvicorn~=0.23.2
-asyncmy~=0.2.9
+aiomysql~=0.2.0
 bcrypt~=4.2.0
