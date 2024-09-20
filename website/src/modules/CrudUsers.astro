@@ -233,7 +233,7 @@ const { class: clazz } = Astro.props;
 									scope="col"
 									class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400"
 								>
-									Full Name
+									Name
 								</th>
 								<th
 									scope="col"
@@ -396,11 +396,17 @@ const { class: clazz } = Astro.props;
 									type="password"
 									name="edit-new-password"
 									value=""
-									id="nedit-ew-password"
+									id="edit-new-password"
 									class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
 									placeholder="••••••••"
 									required
 								/>
+							</div>
+							<div
+								class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+								role="alert"
+								id="edit-user-error"
+							>
 							</div>
 						</div>
 					</form>
@@ -411,8 +417,7 @@ const { class: clazz } = Astro.props;
 						<button
 							class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
 							type="submit"
-							id="edit-user-submit"
-							>Save all</button
+							id="edit-user-submit">Save all</button
 						>
 					</div>
 				</div>
@@ -610,7 +615,7 @@ const { class: clazz } = Astro.props;
 
 <script>
 	import { Modal } from 'flowbite';
-import { getUsers } from '../lib/api';
+	import { getUsers, updateUser } from '../lib/api';
 
 	let limit = 20;
 	let page = 1;
@@ -618,15 +623,21 @@ import { getUsers } from '../lib/api';
 	const usersList = document.getElementById('users-list');
 	const editUserModal = new Modal(document.getElementById('edit-user-modal'));
 	const addUserModal = new Modal(document.getElementById('add-user-modal'));
-	const deleteUserModal = new Modal(document.getElementById('delete-user-modal'));
+	const deleteUserModal = new Modal(
+		document.getElementById('delete-user-modal'),
+	);
 
-	function updateUsers() {
+	function loadUsers() {
 		usersList.innerHTML = '';
 		getUsers(limit, (page - 1) * limit).then((data) => {
 			data.forEach((user) => {
 				let fullName = 'N/A';
 				if (user.first_name && user.last_name) {
 					fullName = `${user.first_name} ${user.last_name}`;
+				} else if (user.first_name) {
+					fullName = user.first_name;
+				} else if (user.last_name) {
+					fullName = user.last_name;
 				}
 
 				usersList.innerHTML += `<div>
@@ -715,31 +726,85 @@ import { getUsers } from '../lib/api';
 											</td>
 										</tr>
 									</div>`;
-				
-				document.getElementById(`edit-user-${user.user_id}`).addEventListener('click', () => {
-					document.getElementById('edit-first-name').value = user.first_name;
-					document.getElementById('edit-last-name').value = user.last_name;
-					document.getElementById('edit-email').value = user.email;
-					document.getElementById('edit-username').value = user.username;
-					document.getElementById('edit-role').value = user.role_id;
 
-					document.getElementById('edit-user-submit').onclick = () => {
-						// TODO: Update user
-					};
+				document
+					.getElementById(`edit-user-${user.user_id}`)
+					.addEventListener('click', () => {
+						document.getElementById('edit-first-name').value = user.first_name;
+						document.getElementById('edit-last-name').value = user.last_name;
+						document.getElementById('edit-email').value = user.email;
+						document.getElementById('edit-username').value = user.username;
+						document.getElementById('edit-role').value = user.role_id;
 
-					editUserModal.toggle();
-				});
+						document.getElementById('edit-user-submit').onclick = () => {
+							data = {};
 
-				document.getElementById(`delete-user-${user.user_id}`).addEventListener('click', () => {
-					deleteUserModal.toggle();
-				});
+							let firstName = document.getElementById('edit-first-name').value;
+							let lastName = document.getElementById('edit-last-name').value;
+							let email = document.getElementById('edit-email').value;
+							let username = document.getElementById('edit-username').value;
+							let roleID = document.getElementById('edit-role').value;
+							let newPassword = document.getElementById('edit-new-password').value;
+
+							if (user.first_name === null) {
+								user.first_name = '';
+							}
+							if (user.last_name === null) {
+								user.last_name = '';
+							}
+							if (user.role_id === null) {
+								user.role_id = '';
+							}
+
+							if (user.first_name !== firstName) {
+								data.first_name = firstName;
+							}
+
+							if (user.last_name !== lastName) {
+								data.last_name = lastName;
+							}
+
+							if (user.email !== email) {
+								data.email = email;
+							}
+
+							if (user.username !== username) {
+								data.username = username;
+							}
+
+							if (user.role_id !== roleID) {
+								data.role_id = roleID;
+							}
+
+							if (newPassword) {
+								data.password = newPassword;
+							}
+
+							updateUser(user.user_id, data).then(({ response, data }) => {
+								if (response.status === 200) {
+									editUserModal.hide();
+									loadUsers();
+								} else {
+									document.getElementById('edit-user-error').innerText = data.detail;
+								}
+
+								loadUsers();
+							});
+						};
+					});
+
+				document
+					.getElementById(`delete-user-${user.user_id}`)
+					.addEventListener('click', () => {
+						deleteUserModal.toggle();
+					});
 			});
 		});
 	}
 
-	updateUsers();
+	loadUsers();
 
 	document.getElementById('refresh-users').addEventListener('click', () => {
-		updateUsers();
+		loadUsers();
 	});
 </script>

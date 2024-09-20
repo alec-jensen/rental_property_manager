@@ -1,5 +1,5 @@
 import os
-from aiomysql import Connection
+from glob import glob
 from dataclasses import dataclass
 
 class SQLParseError(Exception):
@@ -18,14 +18,16 @@ class SQLQueryManager:
         if not os.path.isdir(path):
             raise ValueError(f"Path '{path}' is not a directory")
         
-        for file in os.listdir(path):
-            if file.endswith(".sql"):
-                with open(os.path.join(path, file)) as f:
-                    self.queries[file[:-4]] = f.read()
+        for file in glob(f"{path}/**/*.sql", recursive=True):
+            with open(file, "r") as f:
+                name = os.path.splitext(os.path.basename(file))[0]
+                self.queries[name] = f.read()
 
     async def execute(self, name, cursor, *args, **kwargs):
         try:
             await cursor.execute(self.queries[name], *args, **kwargs)
+        except KeyError:
+            raise SQLParseError(f"Query '{name}' not found")
         except Exception as e:
             raise SQLParseError(f"Error executing query '{name}': {e}")
 

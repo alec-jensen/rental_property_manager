@@ -50,18 +50,18 @@
   </sodipodi:namedview>
   <defs
      id="defs1302" />
-  <circle
+  <rect
      style="fill:#ffffff;stroke-width:0.264583"
-     id="path1"
-     cx="111.90452"
-     cy="90.416496"
-     r="67.73333"
-     transform="translate(-44.171185,-22.683167)" />
+     id="rect1"
+     width="135.46666"
+     height="135.46666"
+     x="0"
+     y="0" />
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="matrix(0.93379875,0,0,0.93379875,-36.177232,-22.038129)">
+     transform="matrix(0.93379875,0,0,0.93379875,-36.177233,-22.038129)">
     <text
        xml:space="preserve"
        style="font-size:61.1727px;font-family:HYGothic-Extra;-inkscape-font-specification:HYGothic-Extra;writing-mode:lr-tb;fill:#71563a;fill-opacity:1;stroke-width:0.318608"

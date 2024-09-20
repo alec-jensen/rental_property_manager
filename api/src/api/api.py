@@ -11,7 +11,7 @@ import secrets
 import datetime
 from typing import Annotated
 
-from request_models import LoginRequestModel, CheckSessionRequestModel
+from request_models import LoginRequestModel, CheckSessionRequestModel, UpdateUserRequestModel
 from sql_query_manager import SQLQueryManager
 
 app = FastAPI()
@@ -193,6 +193,12 @@ async def get_user(Authorization: Annotated[str | None, Header()]):
                 await SQM.execute("GetUserById", cursor, (session["UserId"],))
                 user = await cursor.fetchone()
 
+                if user is None:
+                    raise HTTPException(
+                        status_code=status.HTTP_404_NOT_FOUND,
+                        detail="User not found"
+                    )
+
                 return {
                     "created_at": user["Created"],
                     "user_id": user["UserId"],
@@ -221,8 +227,14 @@ async def get_user_id(user_id: str, Authorization: Annotated[str | None, Header(
     if await verify_session(session_id, session_token):
         async with db.pool.acquire() as conn:
             async with conn.cursor() as cursor:
-                await SQM.execute("GetUserById", cursor, (user_id,))
+                await SQM.execute("GetUserByUserId", cursor, (user_id,))
                 user = await cursor.fetchone()
+
+                if user is None:
+                    raise HTTPException(
+                        status_code=status.HTTP_404_NOT_FOUND,
+                        detail="User not found"
+                    )
 
                 return {
                     "created_at": user["Created"],
@@ -269,6 +281,65 @@ async def get_users(Authorization: Annotated[str | None, Header()], limit: int =
                     })
 
                 return new_users
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid session"
+        )
+
+@app.patch("/user/{user_id}/update")
+async def update_user(user_id: str, Authorization: Annotated[str | None, Header()], request: UpdateUserRequestModel):
+    if Authorization is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid session"
+        )
+
+    session_id, session_token = Authorization.removeprefix("Bearer ").split(":")
+
+    if await verify_session(session_id, session_token):
+        async with db.pool.acquire() as conn:
+            async with conn.cursor() as cursor:
+                await SQM.execute("GetUserByUserId", cursor, (user_id,))
+                user = await cursor.fetchone()
+
+                if user is None:
+                    raise HTTPException(
+                        status_code=status.HTTP_404_NOT_FOUND,
+                        detail="User not found"
+                    )
+                
+                if request.role_id is not None:
+                    try:
+                        try:
+                            role_id = int(request.role_id)
+                        except ValueError:
+                            if request.role_id == "":
+                                role_id = None
+                            else:
+                                raise ValueError
+
+                        await SQM.execute("UpdateRoleId", cursor, (role_id, user_id))
+                    except ValueError:
+                        raise HTTPException(
+                            status_code=status.HTTP_400_BAD_REQUEST,
+                            detail="Invalid role_id: must be an integer"
+                        )
+                    
+                if request.username is not None:
+                    await SQM.execute("UpdateUsername", cursor, (request.username, user_id))
+                if request.email is not None:
+                    await SQM.execute("UpdateEmail", cursor, (request.email, user_id))
+                if request.password is not None:
+                    salt = bcrypt.gensalt()
+                    hashed_password = bcrypt.hashpw(request.password.encode(), salt)
+                    await SQM.execute("UpdatePassword", cursor, (hashed_password, user_id))
+                if request.first_name is not None:
+                    await SQM.execute("UpdateFirstName", cursor, (request.first_name, user_id))
+                if request.last_name is not None:
+                    await SQM.execute("UpdateLastName", cursor, (request.last_name, user_id))
+
+                return {"success": True}
     else:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

@@ -1,0 +1,1 @@
+UPDATE User SET Password = %s WHERE UserId = %s;

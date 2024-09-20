@@ -1,0 +1,1 @@
+UPDATE User SET LastName = %s WHERE UserId = %s;
