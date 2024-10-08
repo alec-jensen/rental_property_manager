@@ -13,7 +13,7 @@ function checkStoredSession() {
 
 export async function testSession() {
 	if (!checkStoredSession()) {
-		return;
+		return false;
 	}
 
 	const response = await fetch(`${API_URL}/user/check_session`, {
@@ -30,6 +30,8 @@ export async function testSession() {
 	if (data.valid === true) {
 		return true;
 	}
+
+	return false;
 }
 
 export function logout() {

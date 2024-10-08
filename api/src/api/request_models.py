@@ -15,3 +15,11 @@ class UpdateUserRequestModel(BaseModel):
     first_name: str | None = Field(None, alias="first_name")
     last_name: str | None = Field(None, alias="last_name")
     role_id: str | None = Field(None, alias="role_id")
+
+class CreateUserRequestModel(BaseModel):
+    username: str | None = Field(None, alias="username")
+    email: str
+    password: str | None = Field(None, alias="password")
+    first_name: str | None = Field(None, alias="first_name")
+    last_name: str | None = Field(None, alias="last_name")
+    role_id: str | None = Field(None, alias="role_id")

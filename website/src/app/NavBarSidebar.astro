@@ -4,7 +4,6 @@
 import { asset } from '../lib/data.js';
 
 import ColorModeSwitcher from '../components/ColorModeSwitcher.astro';
-import GitHubButton from '../components/GitHubButton.astro';
 import SearchInput from '../components/SearchInput.astro';
 ---
 
@@ -675,6 +674,10 @@ import SearchInput from '../components/SearchInput.astro';
 
 	document.addEventListener('DOMContentLoaded', function () {
 		getUserData().then((data) => {
+			if (!data) {
+				return;
+			}
+
 			if (data.first_name && data.last_name) {
 				document.getElementById(
 					'user-name',

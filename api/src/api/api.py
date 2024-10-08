@@ -10,6 +10,9 @@ import bcrypt
 import secrets
 import datetime
 from typing import Annotated
+import aiosmtplib
+from email.message import EmailMessage
+from urllib.parse import urljoin, urlencode
 
 from request_models import LoginRequestModel, CheckSessionRequestModel, UpdateUserRequestModel
 from sql_query_manager import SQLQueryManager
@@ -346,7 +349,49 @@ async def update_user(user_id: str, Authorization: Annotated[str | None, Header(
             detail="Invalid session"
         )
 
+@app.post("/user/create")
+async def create_user(request: UpdateUserRequestModel):
+    async with db.pool.acquire() as conn:
+        async with conn.cursor() as cursor:
+            if request.password is not None:
+                salt = bcrypt.gensalt()
+                hashed_password = bcrypt.hashpw(request.password.encode(), salt)
 
+                await SQM.execute("CreateUser", cursor, (uuid.uuid4().hex, request.username, hashed_password, request.email, request.first_name, request.last_name, request.role_id))
+
+                return {"success": True}
+            else:
+                await SQM.execute("CreateUserInvitation", cursor, (request.username, request.email, request.first_name, request.last_name, request.role_id, request.email))
+
+                await SQM.execute("GetUserInvitationByEmail", cursor, (request.email,))
+                invitation = await cursor.fetchone()
+
+                email = EmailMessage()
+                email["From"] = os.getenv("SEND_EMAIL_FROM", "test@example.com")
+                email["To"] = request.email
+                email["Subject"] = "Invitation to join TDM"
+
+                content = "Hello"
+
+                if request.first_name is not None:
+                    content += f" {request.first_name}"
+                elif request.username is not None:
+                    content += f" {request.username}"
+
+                link = urljoin(os.getenv("FRONTEND_URL", "http://localhost:3000"), f"/authentication/sign-up?{urlencode({'invitation_id': invitation['Id'], 'email': request.email})}")
+
+                content += f",\n\nYou have been invited to join TDM. Please click the following link to create your account:\n\n{link}\n\nIf you did not request this invitation, you can ignore this email."
+                email.set_content(content)
+
+                await aiosmtplib.send(email,
+                    hostname=os.getenv("SMTP_HOST", "localhost"),
+                    port=int(os.getenv("SMTP_PORT", 1025)),
+                    username=os.getenv("SMTP_USER", None),
+                    password=os.getenv("SMTP_PASSWORD", None),
+                    start_tls=False
+                )
+
+                return {"success": True}
 
 def main():
     if not os.path.exists("config.json"):
